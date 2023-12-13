@@ -1,6 +1,7 @@
-package top.dlpujhj.sxx_match_helper.service;
+package cn.edu.dlpulyt.keshe.service;
 
-import top.dlpujhj.sxx_match_helper.pojo.Resource;
+
+import cn.edu.dlpulyt.keshe.pojo.Resource;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author dlpujhj
  * @since 2023-03-14
  */
-public interface IResourceService extends IService<Resource> {
+public interface ResourceService extends IService<Resource> {
 
 }

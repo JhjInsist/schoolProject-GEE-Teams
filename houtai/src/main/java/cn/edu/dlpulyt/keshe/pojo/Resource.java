@@ -1,14 +1,14 @@
-package top.dlpujhj.sxx_match_helper.pojo;
+package cn.edu.dlpulyt.keshe.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+
+import cn.edu.dlpulyt.keshe.base.IdBase;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import top.dlpujhj.sxx_match_helper.base.IdBase;
+
 
 /**
  * <p>
@@ -25,8 +25,7 @@ public class Resource extends IdBase implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
-    private Integer uploaderId;
+    private String uploaderId;
 
     private String title;
 
@@ -38,7 +37,7 @@ public class Resource extends IdBase implements Serializable {
 
     private String fileType;
 
-    private LocalDateTime createTime;
+    private Timestamp createTime;
 
-    private LocalDateTime updateTime;
+    private Timestamp updateTime;
 }

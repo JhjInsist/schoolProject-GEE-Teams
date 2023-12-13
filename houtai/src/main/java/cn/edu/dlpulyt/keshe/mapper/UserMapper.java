@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-@Mapper
 public interface UserMapper{
     // 在数据库里查手机号和密码
     @Select("select * from user where username = #{username} and password = #{password}")

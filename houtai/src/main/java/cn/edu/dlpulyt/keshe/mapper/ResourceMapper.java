@@ -1,6 +1,7 @@
-package top.dlpujhj.sxx_match_helper.mapper;
+package cn.edu.dlpulyt.keshe.mapper;
 
-import top.dlpujhj.sxx_match_helper.pojo.Resource;
+
+import cn.edu.dlpulyt.keshe.pojo.Resource;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

@@ -6,13 +6,13 @@ import cn.edu.dlpulyt.keshe.model.RedisModel;
 import cn.edu.dlpulyt.keshe.pojo.User;
 import cn.edu.dlpulyt.keshe.service.RedisService;
 import cn.edu.dlpulyt.keshe.service.UserService;
-import jakarta.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service

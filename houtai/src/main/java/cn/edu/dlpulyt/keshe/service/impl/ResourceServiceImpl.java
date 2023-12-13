@@ -1,8 +1,8 @@
-package top.dlpujhj.sxx_match_helper.service.impl;
+package cn.edu.dlpulyt.keshe.service.impl;
 
-import top.dlpujhj.sxx_match_helper.pojo.Resource;
-import top.dlpujhj.sxx_match_helper.mapper.ResourceMapper;
-import top.dlpujhj.sxx_match_helper.service.IResourceService;
+import cn.edu.dlpulyt.keshe.mapper.ResourceMapper;
+import cn.edu.dlpulyt.keshe.pojo.Resource;
+import cn.edu.dlpulyt.keshe.service.ResourceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2023-03-14
  */
 @Service
-public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> implements IResourceService {
+public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> implements ResourceService {
 
 }

@@ -1,4 +1,4 @@
-package top.dlpujhj.sxx_match_helper.base;
+package cn.edu.dlpulyt.keshe.base;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

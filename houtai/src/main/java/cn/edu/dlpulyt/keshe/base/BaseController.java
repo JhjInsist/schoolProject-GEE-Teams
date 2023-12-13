@@ -1,18 +1,15 @@
-package top.dlpujhj.sxx_match_helper.base;
+package cn.edu.dlpulyt.keshe.base;
 
+import cn.edu.dlpulyt.keshe.tool.ResultMap;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.IService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import top.dlpujhj.sxx_match_helper.tools.JWTUtils;
-import top.dlpujhj.sxx_match_helper.tools.ResultMap;
+
 
 import java.util.List;
 
@@ -61,27 +58,6 @@ public class BaseController<T extends IdBase,S extends IService<T>> {
     public void delete(@RequestBody T t){
         t.setDeleted(1);
         s.updateById(t);
-    }
-
-    @RequestMapping("listUser")
-    public ResultMap listUser(HttpServletRequest request){
-
-        return this.listUser(null,request);
-    }
-
-
-    @RequestMapping("listUserOrderBy")
-    public ResultMap listUser(String orderby, HttpServletRequest request){
-        Integer userIdByToken = JWTUtils.getUserIdByToken(request.getHeader("token"));
-
-        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",userIdByToken).eq("deleted",0);
-        if (StringUtils.isNotEmpty(orderby))
-            queryWrapper.orderByAsc(orderby);
-        List<T> list = s.list(queryWrapper);
-        ResultMap resultMap = new ResultMap();
-        resultMap.setData(list);
-        return resultMap;
     }
 
 

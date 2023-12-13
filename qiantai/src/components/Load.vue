@@ -1,33 +1,53 @@
 <template>
   <div id="content">
-    <el-input v-model="da"></el-input>
-    <el-upload class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/" :file-list="fileList" :auto-upload="false">
-      <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-      <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-    </el-upload>
+    <div id="header">
+      <div id="input">
+        <el-input v-model="data.title" placeholder="请输入文件标题"></el-input>
+        <el-input v-model="data.discription" placeholder="请输入文件文件描述"></el-input>
+      </div>
+      <el-upload class="upload-demo" drag action="http://localhost:8080/keshe/resource/upload" :data="data" :before-upload="beforeUpload">
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">文件大小不超过500kb</div>
+      </el-upload>
+    </div>
+    <div id="list">
+      <div id="title">历史上传</div>
+      <div id="listInfo" v-for="item of this.recordList">
+        <div>文件名称： {{item.description}}</div>
+        <div>文件描述： {{item.description}}</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       da: '',
-      fileList: [{
-        name: 'food.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-      }, {
-        name: 'food2.jpeg',
-        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-      }]
-    };
+      data: {
+        title: '',
+        discription: '',
+        userId: '',
+      },
+      recordList:[],
+    }
   },
   methods: {
-    submitUpload() {
-      if (this.$data.da === '') {
-        console.log(11111);
-        this.$refs.upload.submit();
+    beforeUpload() {
+      if (this.data.title == '' && this.data.discription == '') {
+        this.$notify.error({
+          title: '通知',
+          message: '请输入文件标题和文件描述',
+          duration: 1000
+        });
+        return false;
+      } else {
+        this.data.userId = sessionStorage.getItem('userId')
+        return true
       }
     },
     success() {
@@ -47,9 +67,18 @@ export default {
         duration: 1000
       });
     },
-    check() {
-      console.log(111);
+    loadData(){
+      // 获取数据
+      axios.get('/resource/list').then(res => {
+        this.recordList = res.data.data;
+        console.log(this.recordList)
+      }).catch(()=>{
+        this.$message.error("获取列表失败");
+      })
     }
+  },
+  created() {
+    this.loadData();
   },
 }
 </script>
@@ -57,28 +86,102 @@ export default {
 <style scoped lang="less">
 #content {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  // justify-content: space-around;
   align-items: center;
-  /* background-color: red; */
+}
+
+#header {
+  width: 100%;
+  height: 30%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: #e8e8e8 2px solid;
+}
+
+#list {
+  margin-top: 1%;
+  padding: 1% 0 1% 0;
+  width: 100%;
+  height: 66%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+#title {
+  width: 90%;
+  height: 30px;
+  font-size: larger;
+  background-color: #f0f2f5;
+  text-align: center;
+  line-height: 30px;
+  margin-bottom: 1px;
+}
+
+#listInfo {
+  padding: 0 1% 0 1%;
+  width: 90%;
+  height: 40px;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 12px;
+}
+
+#name {
+  width: 40%;
 }
 
 .upload-demo {
   margin-top: 10px;
-  width: 100%;
+  width: 30%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/deep/.el-upload-list__item {
-  background-color: #ffffff;
-  font-size: 26px;
+#input {
+  width: 30%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 12px;
+  border: #d9d9d9 2px dotted;
+  background-color: #fff;
 }
 
-/deep/ .el-upload-list {
-  width: 96%;
-  margin: 0 2% 0 2%;
+#input:hover {
+  border: #409eff 2px dotted;
 }
+
+/deep/ .el-input {
+  width: 80%;
+}
+
+/deep/ .el-input__inner {
+  border-radius: 12px !important;
+}
+
+// /deep/.el-upload-list__item {
+//   background-color: #ffffff;
+//   font-size: 26px;
+// }
+
+// /deep/ .el-upload-list {
+//   width: 96%;
+//   margin: 0 2% 0 2%;
+// }
 </style>
