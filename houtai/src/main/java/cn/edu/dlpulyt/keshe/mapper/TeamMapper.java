@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-@Mapper
 public interface TeamMapper {
     @Insert("INSERT INTO team (leader_id, team_name,Institution_province,Institution_name,leader_gender,leader_phonenum,team_request,leader_name) VALUES (#{leaderId},#{teamName},#{institutionProvince},#{institutionName},#{leaderGender},#{leaderPhonenum},#{teamRequest},#{leaderName})")
     @Options(useGeneratedKeys = true,keyColumn = "id",keyProperty = "id")

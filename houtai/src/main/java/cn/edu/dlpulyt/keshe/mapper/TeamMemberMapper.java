@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 import java.util.Map;
 
-@Mapper
 public interface TeamMemberMapper {
     @Select("select * from team_member a join team b on a.team_id = b.id where a.user_id = #{userId}")
     public List<Team> listByUser(String userId);

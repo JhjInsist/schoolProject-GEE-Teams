@@ -1,7 +1,6 @@
 package cn.edu.dlpulyt.keshe.mapper;
 
 import cn.edu.dlpulyt.keshe.pojo.Message;
-import cn.edu.dlpulyt.keshe.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -9,7 +8,6 @@ import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
-@Mapper
 public interface MessageMapper {
 
     @Select("select * from message where receiver_id = #{userId} and read_status = #{readStatus}")

@@ -1,22 +1,21 @@
-package top.dlpujhj.sxx_match_helper.controller;
+package cn.edu.dlpulyt.keshe.controller;
 
 
+import cn.edu.dlpulyt.keshe.base.BaseController;
+import cn.edu.dlpulyt.keshe.pojo.Resource;
+import cn.edu.dlpulyt.keshe.service.ResourceService;
+import cn.edu.dlpulyt.keshe.tool.QiNiuUtils;
+import cn.edu.dlpulyt.keshe.tool.Renum;
+import cn.edu.dlpulyt.keshe.tool.ResultMap;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.qiniu.http.Response;
-import freemarker.template.utility.StringUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import top.dlpujhj.sxx_match_helper.base.BaseController;
-import top.dlpujhj.sxx_match_helper.pojo.Resource;
-import top.dlpujhj.sxx_match_helper.service.IResourceService;
-import top.dlpujhj.sxx_match_helper.tools.JWTUtils;
-import top.dlpujhj.sxx_match_helper.tools.QiNiuUtils;
-import top.dlpujhj.sxx_match_helper.tools.Renum;
-import top.dlpujhj.sxx_match_helper.tools.ResultMap;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -29,19 +28,18 @@ import java.io.InputStream;
  * @since 2023-03-14
  */
 @RestController
-@RequestMapping("/sxx_match_helper/resource")
-public class ResourceController extends BaseController<Resource,IResourceService> {
+@RequestMapping("/keshe/resource")
+public class ResourceController extends BaseController<Resource, ResourceService> {
     QiNiuUtils qiNiuUtils = new QiNiuUtils();
 
     @Autowired
-    private IResourceService resourceService;
+    private ResourceService resourceService;
 
 
-    @PostMapping("upload")
-    public ResultMap fileupload(MultipartFile file, String title ,String discription, HttpServletRequest req){
+    @PostMapping("/upload")
+    public ResultMap fileupload(MultipartFile file, String title, String discription, String userId){
+
         ResultMap resultMap = new ResultMap();
-        String token = req.getHeader("token");
-        System.out.println("token："+ token);
         InputStream is = null;
         Response response = null;
         try {
@@ -57,8 +55,7 @@ public class ResourceController extends BaseController<Resource,IResourceService
 
                 Resource r = new Resource();
                 r.setFilePath(path);
-                Integer userIdByToken = JWTUtils.getUserIdByToken(token);
-                r.setUploaderId(userIdByToken);
+                r.setUploaderId(userId);
                 if (StringUtils.isNotEmpty(title))
                     r.setTitle(title);
                 if (StringUtils.isNotEmpty(discription))

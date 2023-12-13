@@ -1,4 +1,4 @@
-package top.dlpujhj.sxx_match_helper.tools;
+package cn.edu.dlpulyt.keshe.tool;
 
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
@@ -28,9 +28,9 @@ public class QiNiuUtils {
     public static String SECRET_KEY = "DqImFSbPRgOJ22ssyjkHnn-ZSfTc0HKC5cxNJmst";
 
     //要上传的空间
-    public static String bucketname = "sxx-match-helper"; //对应要上传到七牛上 你的那个路径（自己建文件夹 注意设置私有）
+    public static String bucketname = "gee-team"; //对应要上传到七牛上 你的那个路径（自己建文件夹 注意设置私有）
     //上传到七牛后保存的文件名
-    public static String filePackage = "sxx-files";
+    public static String filePackage = "resource";
 
     //密钥配置
     public static Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
