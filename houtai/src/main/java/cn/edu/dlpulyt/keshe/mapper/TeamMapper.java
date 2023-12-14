@@ -1,10 +1,7 @@
 package cn.edu.dlpulyt.keshe.mapper;
 
 import cn.edu.dlpulyt.keshe.pojo.Team;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -18,4 +15,6 @@ public interface TeamMapper {
 
     @Select("select * from team where id = #{id}")
     public Team getById(String id);
+    @Delete("delete from team where id = #{id}")
+    public void delete(String id);
 }

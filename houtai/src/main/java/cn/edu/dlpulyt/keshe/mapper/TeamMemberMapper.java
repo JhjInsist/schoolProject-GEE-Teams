@@ -2,6 +2,7 @@ package cn.edu.dlpulyt.keshe.mapper;
 
 import cn.edu.dlpulyt.keshe.pojo.Team;
 import cn.edu.dlpulyt.keshe.pojo.TeamMember;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
@@ -14,8 +15,8 @@ public interface TeamMemberMapper {
     @Insert("INSERT INTO team_member (user_id, team_id) VALUES (#{userId},#{teamId})")
     public int create(TeamMember team);
 
-    @Select("select * from team_member where user_id = #{userId} and team_id = #{teamId}")
+    @Select("select * from team_member where user_id = #{userId} and id = #{id}")
     public TeamMember checkInTeam(TeamMember teamMember);
-    @Select("delete from team_member where user_id = #{userId} and team_id = #{teamId}")
-    public int exitTeam(TeamMember teamMember);
+    @Delete("delete from team_member where id = #{id}")
+    public void exitTeam(TeamMember teamMember);
 }

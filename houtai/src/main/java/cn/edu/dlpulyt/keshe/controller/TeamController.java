@@ -81,6 +81,7 @@ public class TeamController {
     // 添加小队，将小队信息输入到数据库里
     @RequestMapping("exit")
     public Map<String,Object> exitTeam(@RequestBody TeamMember teamMember) {
+        // 之前的代码有一些问题，这个teamMember的id其实是TeamId
        Map<String,Object> map = new HashMap<>();
        if(teamService.exitTeam(teamMember)>0){
            map.put("msg","退出成功");

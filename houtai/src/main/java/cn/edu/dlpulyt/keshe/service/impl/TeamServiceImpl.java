@@ -75,9 +75,20 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int exitTeam(TeamMember teamMember) {
-        if(teamMemberMapper.checkInTeam(teamMember)!=null){
-           return teamMemberMapper.exitTeam(teamMember);
+
+        TeamMember teamMember1 = teamMemberMapper.checkInTeam(teamMember);
+        if(teamMember1 != null){
+            // 查看用户是不是队长，如果是队长则解散队伍
+            Team team = teamMapper.getById(teamMember1.getTeamId());
+            if (team.getLeaderId().equals(teamMember.getUserId())){
+                teamMapper.delete(teamMember1.getTeamId());
+                return 1;
+            }else {
+                teamMemberMapper.exitTeam(teamMember);
+            }
+            return 1;
         }else {
             return 0;
         }
