@@ -54,7 +54,7 @@ public class ResourceController extends BaseController<Resource, ResourceService
                         .replace("}","");
 
                 Resource r = new Resource();
-                r.setFilePath(path);
+                r.setFilePath(QiNiuUtils.baseUrl+path);
                 r.setUploaderId(userId);
                 if (StringUtils.isNotEmpty(title))
                     r.setTitle(title);

@@ -1,17 +1,14 @@
 <template>
   <div id="content">
-    <div v-if="!show">
       <div class="select">
         <div id="title">信息筛选</div>
         <el-select v-model="value1" placeholder="院校名称">
-          <el-option v-for="item in matches" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
         </el-select>
         <el-button @click="reData()" type="primary" round>清空</el-button>
         <el-button @click="filterData()" type="primary" round>搜索</el-button>
         <el-button @click="newTO()" type="primary" round>创建</el-button>
       </div>
-      <div class="showpage" v-if="flag">
+      <div class="showpage" v-if="infoList.length !== 0">
         <div class="info" v-for="(info, index) in infoList" :key=index>
           <div id="name" class="style">{{ info.teamName }}</div>
           <div id="competitionName" class="style">院校名称：{{ info.institutionName }}</div>
@@ -23,12 +20,9 @@
           <Detail :dialogVisible="visible" :obj="info" @send="(data) => { getData(data) }"></Detail> 
         </div>
       </div>
-      <el-empty el-empty description=" 暂无数据" :image-size="300" v-if="!flag">
+      <el-empty el-empty description=" 暂无数据" :image-size="300" v-if="infoList.length === 0">
       </el-empty>
     </div>
-    <el-empty el-empty description=" 暂无数据" :image-size="300" v-if="show">
-    </el-empty>
-  </div>
 </template>
 
 <script>
@@ -39,24 +33,6 @@ export default {
   data() {
     return {
       visible: false,
-      show: false,
-      matchesList: [],
-      matches: [{
-        value: '北京大学',
-        label: '北京大学'
-      }, {
-        value: '清华大学',
-        label: '清华大学'
-      }, {
-        value: '北京理工大学',
-        label: '北京理工大学'
-      }, {
-        value: '四川大学',
-        label: '四川大学'
-      }, {
-        value: "华南理工大学",
-        label: '华南理工大学'
-      }],
       value1: [],
       infoList: [],
       infoListCopy: [],
@@ -80,6 +56,7 @@ export default {
         })
         .catch(_ => { });
     },
+
     newTO() {
       this.$router.push({ path: '/new' })
     },

@@ -11,13 +11,24 @@
         <div class="el-upload__tip" slot="tip">文件大小不超过500kb</div>
       </el-upload>
     </div>
-    <div id="list">
-      <div id="title">历史上传</div>
-      <div id="listInfo" v-for="item of this.recordList">
-        <div>文件名称： {{item.description}}</div>
-        <div>文件描述： {{item.description}}</div>
-      </div>
-    </div>
+    <el-table :data="recordList" style="width: 100%" v-if="recordList.length !== 0">
+      <el-table-column prop="title" label="文件名"></el-table-column>
+      <el-table-column prop="description" label="简介"></el-table-column>
+      <el-table-column prop="createTime" label="上传日期"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="review(scope.$index)">预览 </el-button>
+          <el-button @click="handleDelete(scope.$index)" type="danger">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+<!--    <div id="list">-->
+<!--      <div id="title">历史上传</div>-->
+<!--      <div id="listInfo" v-for="item of recordList">-->
+<!--        <div>文件名称： {{item.description}}</div>-->
+<!--        <div>文件描述： {{item.description}}</div>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -37,6 +48,19 @@ export default {
     }
   },
   methods: {
+    review(index) {
+      window.open(this.recordList[index].filePath, '_blank');
+    },
+    handleDelete(index) {
+      // 获取数据
+      axios.post('/resource/delete',{
+        id:this.recordList[index].id
+      }).then(() => {
+        this.loadData();
+      }).catch(()=>{
+        this.$message.error("删除失败");
+      })
+    },
     beforeUpload() {
       if (this.data.title == '' && this.data.discription == '') {
         this.$notify.error({
@@ -46,7 +70,6 @@ export default {
         });
         return false;
       } else {
-        this.data.userId = sessionStorage.getItem('userId')
         return true
       }
     },
@@ -69,7 +92,7 @@ export default {
     },
     loadData(){
       // 获取数据
-      axios.get('/resource/list').then(res => {
+      axios.get('/resource/list?uploaderId='+this.data.userId).then(res => {
         this.recordList = res.data.data;
         console.log(this.recordList)
       }).catch(()=>{
@@ -78,6 +101,7 @@ export default {
     }
   },
   created() {
+    this.data.userId = sessionStorage.getItem('userId')
     this.loadData();
   },
 }

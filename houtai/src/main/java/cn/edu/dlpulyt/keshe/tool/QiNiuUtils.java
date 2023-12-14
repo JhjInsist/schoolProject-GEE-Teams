@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class QiNiuUtils {
-    private static String baseUrl = "http://rrmidks1u.hb-bkt.clouddn.com/";
+    public static String baseUrl = "http://s5k6kneq0.hb-bkt.clouddn.com/";
 
     public static SimpleDateFormat sdf = new SimpleDateFormat("/yyyy-MM-dd/");
 

@@ -1,15 +1,13 @@
 <template>
   <div id="content">
-    <div v-if="show">
+    <div v-if="tableData.length === 0">
       <el-empty description="暂无消息" :image-size="300">
       </el-empty>
     </div>
-    <el-table :data="tableData" style="width: 100%" v-if="!show">
-      <el-table-column prop="date" label="日期"></el-table-column>
-      <el-table-column label="文件详情" href="#"><template slot-scope="scope">
-          <el-link type="primary" @click.prevent="review(scope.$index)">预览</el-link>
-        </template></el-table-column>
-      <el-table-column prop="address" label="下载地址"></el-table-column>
+    <el-table :data="tableData" style="width: 100%" v-if="tableData.length !== 0">
+      <el-table-column label="文件名称" prop="title"></el-table-column>
+      <el-table-column label="时间" prop="downloadTime"></el-table-column>
+      <el-table-column label="描述" prop="description"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="primary">下载</el-button>
@@ -21,26 +19,44 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       show: false,
       tableData: [
-        { date: '2022-01-01', address: '上海市' },
-        { date: '2022-01-02', address: '上海市' },
-        { date: '2022-01-03', address: '上海市' },
       ],
     };
   },
   methods: {
     handleDelete(index) {
-      this.tableData.splice(index, 1);
+      // 获取数据
+      axios.post('/downloadRecord/delete',{
+        userId:sessionStorage.getItem('userId'),
+        id:this.tableData[index].id
+      }).then(res => {
+        this.loadData();
+      }).catch(()=>{
+        this.$message.error("获取列表失败");
+      })
     },
     review(index) {
-      console.log(index);
-      window.open('https://s1.ax1x.com/2023/03/05/ppExLLT.jpg', '_blank');
+      window.open(this.tableData[index].filePath, '_blank');
     },
+    loadData(){
+      // 获取数据
+      axios.get('/downloadRecord/list?userId='+sessionStorage.getItem('userId')).then(res => {
+        this.tableData = res.data.data;
+      }).catch(()=>{
+        this.$message.error("获取列表失败");
+      })
+    }
   },
+  created() {
+
+    this.loadData()
+  }
 }
 </script>
 

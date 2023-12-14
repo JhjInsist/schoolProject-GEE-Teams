@@ -17,4 +17,6 @@ public interface TeamService {
     public List<Team> listByUserId(String userId);
 
     public int addTeam(TeamMember teamMember);
+
+    public int exitTeam(TeamMember teamMember);
 }

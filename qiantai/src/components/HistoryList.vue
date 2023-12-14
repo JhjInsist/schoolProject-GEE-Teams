@@ -3,25 +3,24 @@
     <div v-if="!show">
       <div class="select">
         <div id="title">信息筛选</div>
-        <el-select v-model="value1" placeholder="请选择">
-          <el-option v-for="item in matches" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
+        <el-select  placeholder="请选择">
+
         </el-select>
         <el-button @click="this.reData()" type="primary" round>清空</el-button>
         <el-button @click="this.filterData()" type="primary" round>搜索</el-button>
       </div>
-      <div class="showpage" v-if="flag">
+      <div class="showpage" v-if="this.infoList !== 0">
         <div class="info" v-for="(item, index) in this.infoList" :key=index>
           <div id="name" class="style">{{ item.teamName }}</div>
           <div id="leader" class="style">队长：{{ item.leaderName }}</div>
           <div id="contact" class="style">联系方式：{{ item.leaderPhonenum }}</div>
-          <div id="delete">退出队伍</div>
+          <button @click="exit(item.teamId)" id="delete">退出队伍</button>
           <!-- <div id="avatar" class="style"><el-avatar icon="el-icon-user-solid"></el-avatar><el-avatar icon="el-icon-user-solid"></el-avatar><el-avatar icon="el-icon-user-solid"></el-avatar>
             <h5>···</h5>
           </div> -->
         </div>
       </div>
-      <el-empty el-empty description=" 暂无数据" :image-size="300" v-if="!flag">
+      <el-empty el-empty description=" 暂无数据" :image-size="300" v-if="this.infoList === 0">
       </el-empty>
     </div>
     <el-empty description="暂无数据" :image-size="300" v-if="show">
@@ -35,53 +34,56 @@ export default {
   data() {
     return {
       show: false,
-      matchesList: [],
-      matches: [{
-        value: '北京大学',
-        label: '北京大学'
-      }, {
-        value: '清华大学',
-        label: '清华大学'
-      }, {
-        value: '北京理工大学',
-        label: '北京理工大学'
-      }, {
-        value: '四川大学',
-        label: '四川大学'
-      }, {
-        value: "华南理工大学",
-        label: '华南理工大学'
-      }],
-      value1: [],
       infoList: [],
       infoListCopy: [],
+      userId: '',
       flag: true,
     }
   },
   methods: {
     // 筛选数据
     filterData() {
-      console.log(this.value1);
-      const val = this.value1;
     },
+    exit(teamId) {
+      this.$confirm('确定离开小队吗？如果你是队长离开后小队将解散', '提示', { type: 'warning' })
+          .then(_ => {
+            axios.post("/team/exit",{
+              teamId: teamId,
+              userId: this.userId
+            }).then(res=>{
+              if(res.data.status === "成功"){
+                this.$message.success(res.data.msg);
+              }else{
+                this.$message.error(res.data.msg);
+              }
+              this.loadData();
+            }).catch(error=>{
+              this.$message.error("未知错误");
+              console.log(error);
+            })
+          })
+          .catch(_ => { });
+    },
+    loadData() {
+      // 获取数据
+      axios.get('/team/myteam').then(res => {
+        console.log(res);
+        this.infoList = res.data.msg;
+        console.log('infoList',this.infoList);
 
+      }).catch(()=>{
+        this.$message.error("获取列表失败");
+      })
+    },
     // 重置数据
     reData() {
-      this.value1 = [];
       this.infoList = this.infoListCopy;
       this.flag = true;
     },
   },
   created() {
-    // 获取数据
-    axios.get('/team/myteam').then(res => {
-        console.log(res);
-        this.infoList = res.data.msg;
-        console.log('infoList',this.infoList);
-        
-      }).catch(()=>{
-        this.$message.error("获取列表失败");
-      })
+    this.userId = sessionStorage.getItem('userId');
+    this.loadData();
   },
 }
 </script>

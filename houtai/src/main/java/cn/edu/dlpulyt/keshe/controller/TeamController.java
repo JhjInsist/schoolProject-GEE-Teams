@@ -77,4 +77,18 @@ public class TeamController {
         }
         return map;
     }
+
+    // 添加小队，将小队信息输入到数据库里
+    @RequestMapping("exit")
+    public Map<String,Object> exitTeam(@RequestBody TeamMember teamMember) {
+       Map<String,Object> map = new HashMap<>();
+       if(teamService.exitTeam(teamMember)>0){
+           map.put("msg","退出成功");
+           map.put("status","成功");
+       }else {
+           map.put("msg","退出失败");
+           map.put("status","失败");
+       }
+       return map;
+    }
 }

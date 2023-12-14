@@ -45,7 +45,6 @@ public class BaseController<T extends IdBase,S extends IService<T>> {
 
     @RequestMapping("/add")
     public void addOne(@RequestBody T t){
-
         s.save(t);
     }
 
