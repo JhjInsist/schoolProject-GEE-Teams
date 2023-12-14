@@ -1,35 +1,17 @@
 <template>
   <div id="content">
-    <div v-if="show">
+    <div v-if="tableData.length === 0">
       <el-empty description="暂无资源可下载" :image-size="300">
         <el-button type="primary" @click="toLoad">去上传</el-button>
       </el-empty>
     </div>
-    <el-table :data="tableData" style="width: 100%" v-if="!show">
-      <el-table-column type="expand">
-        <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="发件人">
-              <span>{{ props.row.name }}</span>
-            </el-form-item>
-            <el-form-item label="描述">
-              <span>{{ props.row.desc }}</span>
-            </el-form-item>
-            <el-form-item label="详情">
-              <span>{{ props.row.detail }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
-      <el-table-column label="时间" prop="date">
-      </el-table-column>
-      <el-table-column label="发件人" prop="name">
-      </el-table-column>
-      <el-table-column label="描述" prop="desc">
-      </el-table-column>
+    <el-table :data="tableData" style="width: 100%" v-if="tableData.length !== 0">
+      <el-table-column label="文件名称" prop="title"></el-table-column>
+      <el-table-column label="时间" prop="createTime"></el-table-column>
+      <el-table-column label="描述" prop="description"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="downLoad(scope.$index)" type="primary"><el-link :underline="false">下载</el-link></el-button>
+          <el-button @click="downLoad(scope.$index)" type="primary">下载</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,7 +23,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      show: true,
+      userId:'',
       tableData: [{
         date: '12987122',
         name: '好滋好味鸡蛋仔',
@@ -66,19 +48,34 @@ export default {
     }
   },
   methods: {
+
     toLoad() {
       this.$router.push({ path: '/resourcesload' })
     },
-    downLoad(index) {
-      const h = this.$createElement;
-      this.$notify({
-        title: '提示',
-        message: h('i', { style: 'color: teal' }, '下载成功'),
-        type: 'success',
-        duration: 1000
-      });
+    downLoad(index)  {
+       axios.post('/downloadRecord/add',{
+         userId: this.userId,
+         filePath: this.tableData[index].filePath,
+         title: this.tableData[index].title,
+         description: this.tableData[index].description,
+      }).then(()=>{
+         window.open(this.tableData[index].filePath, '_blank');
+       })
     },
+    loadData(){
+      // 获取数据
+      axios.get('/resource/list').then(res => {
+        this.tableData = res.data.data;
+        console.log(this.tableData)
+      }).catch(()=>{
+        this.$message.error("获取列表失败");
+      })
+    }
   },
+  created() {
+    this.userId = sessionStorage.getItem('userId');
+    this.loadData()
+  }
 }
 </script>
 

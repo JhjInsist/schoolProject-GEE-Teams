@@ -75,6 +75,15 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public int exitTeam(TeamMember teamMember) {
+        if(teamMemberMapper.checkInTeam(teamMember)!=null){
+           return teamMemberMapper.exitTeam(teamMember);
+        }else {
+            return 0;
+        }
+    }
+
+    @Override
     public List<Team> listByUserId(String userId) {
         return teamMemberMapper.listByUser(userId);
     }
