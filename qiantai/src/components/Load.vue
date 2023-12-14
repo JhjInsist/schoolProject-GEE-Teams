@@ -17,7 +17,7 @@
       <el-table-column prop="createTime" label="上传日期"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" @click="review(scope.$index)">预览 </el-button>
+          <el-button type="primary" @click="downLoad(scope.$index)">下载 </el-button>
           <el-button @click="handleDelete(scope.$index)" type="danger">删除</el-button>
         </template>
       </el-table-column>
@@ -48,8 +48,15 @@ export default {
     }
   },
   methods: {
-    review(index) {
-      window.open(this.recordList[index].filePath, '_blank');
+    downLoad(index)  {
+      axios.post('/downloadRecord/add',{
+        userId: this.userId,
+        filePath: this.tableData[index].filePath,
+        title: this.tableData[index].title,
+        description: this.tableData[index].description,
+      }).then(()=>{
+        window.open(this.tableData[index].filePath, '_blank');
+      })
     },
     handleDelete(index) {
       // 获取数据

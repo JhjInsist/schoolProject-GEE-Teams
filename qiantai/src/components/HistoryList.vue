@@ -1,20 +1,11 @@
 <template>
   <div id="content">
-    <div v-if="!show">
-      <div class="select">
-        <div id="title">信息筛选</div>
-        <el-select  placeholder="请选择">
-
-        </el-select>
-        <el-button @click="this.reData()" type="primary" round>清空</el-button>
-        <el-button @click="this.filterData()" type="primary" round>搜索</el-button>
-      </div>
       <div class="showpage" v-if="this.infoList !== 0">
         <div class="info" v-for="(item, index) in this.infoList" :key=index>
           <div id="name" class="style">{{ item.teamName }}</div>
           <div id="leader" class="style">队长：{{ item.leaderName }}</div>
           <div id="contact" class="style">联系方式：{{ item.leaderPhonenum }}</div>
-          <button @click="exit(item.teamId)" id="delete">退出队伍</button>
+          <button @click="exit(index)" id="delete">退出队伍</button>
           <!-- <div id="avatar" class="style"><el-avatar icon="el-icon-user-solid"></el-avatar><el-avatar icon="el-icon-user-solid"></el-avatar><el-avatar icon="el-icon-user-solid"></el-avatar>
             <h5>···</h5>
           </div> -->
@@ -23,9 +14,6 @@
       <el-empty el-empty description=" 暂无数据" :image-size="300" v-if="this.infoList === 0">
       </el-empty>
     </div>
-    <el-empty description="暂无数据" :image-size="300" v-if="show">
-    </el-empty>
-  </div>
 </template>
 
 <script lang="ts">
@@ -35,7 +23,6 @@ export default {
     return {
       show: false,
       infoList: [],
-      infoListCopy: [],
       userId: '',
       flag: true,
     }
@@ -44,13 +31,14 @@ export default {
     // 筛选数据
     filterData() {
     },
-    exit(teamId) {
+    exit(id) {
       this.$confirm('确定离开小队吗？如果你是队长离开后小队将解散', '提示', { type: 'warning' })
           .then(_ => {
             axios.post("/team/exit",{
-              teamId: teamId,
-              userId: this.userId
+              id: this.infoList[id].id,
+              userId: this.userId,
             }).then(res=>{
+              console.log(res)
               if(res.data.status === "成功"){
                 this.$message.success(res.data.msg);
               }else{
@@ -60,6 +48,8 @@ export default {
             }).catch(error=>{
               this.$message.error("未知错误");
               console.log(error);
+              this.loadData();
+
             })
           })
           .catch(_ => { });
@@ -67,7 +57,6 @@ export default {
     loadData() {
       // 获取数据
       axios.get('/team/myteam').then(res => {
-        console.log(res);
         this.infoList = res.data.msg;
         console.log('infoList',this.infoList);
 

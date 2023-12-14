@@ -1,11 +1,7 @@
 <template>
   <div id="content">
       <div class="select">
-        <div id="title">信息筛选</div>
-        <el-select v-model="value1" placeholder="院校名称">
-        </el-select>
-        <el-button @click="reData()" type="primary" round>清空</el-button>
-        <el-button @click="filterData()" type="primary" round>搜索</el-button>
+        <div id="title">操作</div>
         <el-button @click="newTO()" type="primary" round>创建</el-button>
       </div>
       <div class="showpage" v-if="infoList.length !== 0">
@@ -33,7 +29,6 @@ export default {
   data() {
     return {
       visible: false,
-      value1: [],
       infoList: [],
       infoListCopy: [],
       flag: true,
@@ -61,54 +56,8 @@ export default {
       this.$router.push({ path: '/new' })
     },
     reData() {
-      this.value1 = [];
       this.infoList = this.infoListCopy;
       this.flag = true;
-    },
-    filterData() {
-      
-      console.log(this.value1);
-      const val = this.value1;
-
-      if (val == "清华大学") {
-        this.flag = true;
-        this.infoList = [{
-          name: "清华大学",
-          leader: "诸葛",
-          contact: "15976245978",
-        }]
-      }
-      else if (val == "北京大学") {
-        this.flag = true;
-        this.infoList = [{
-          name: "北京大学",
-          leader: "小明",
-          contact: "18172440102",
-        }]
-      } else if (val == "华南理工大学") {
-        this.flag = true;
-        this.infoList = [{
-          name: "华南理工大学",
-          leader: "罗斯",
-          contact: "18972645636",
-        }]
-      } else if (val == "北京理工大学") {
-        this.flag = true;
-        this.infoList = [{
-          name: "北京理工大学",
-          leader: "霍德",
-          contact: "18172645436",
-        }]
-      } else if (val == "四川大学") {
-        this.flag = true;
-        this.infoList = [{
-          name: "四川大学",
-          leader: "蔡坤",
-          contact: "15147256798",
-        }]
-      } else {
-        this.flag = false
-      }
     },
     Visible() {
       // this.$router.push({ path: '/demo' })
